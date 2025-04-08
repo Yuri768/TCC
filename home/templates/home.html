@@ -1,0 +1,118 @@
+
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="site" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Agendamento de Consultas Médicas</title>
+    {% load static %}  
+    <link rel="stylesheet" type="text/css" href="{% static 'css/home_styles.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <header>
+        <nav>
+            <ul class="nav-list">
+                <div class="body-nav_list">
+                    <div class="account-nav_list">
+                        {% if usuario %}
+                        <div class="welcome">
+                            <div>
+                                <img id='profile_img' src="{% static 'img/img_usuario.png' %}" alt="Foto de perfil aleatória">
+                            </div>
+                            <div>
+                                <p> <b> Seja bem-vindo </b> </p>
+                                <p>{{ usuario.nome }}</p>
+                            </div>
+                        </div>
+                        {% else %}
+                        <div class="welcome">
+                            <a href={% url 'accounts:registrar' %}> 
+                                <div>
+                                    <img id='profile_img' src="{% static 'img/img_usuario.png' %}" alt="Foto de perfil aleatória">
+                                </div>
+                                <div>
+                                    <p id="text-welcome"> <b> Crie uma conta </b> </p>
+                                </div>
+                            </a>
+                        {% endif %}
+                    </div>
+                    <div class="itens-nav_list">
+                        <li><a href="/">Minha conta</a></li>
+                        <li><a href="/">Agendar</a></li>
+                        <li><a href="/">Historico de consultas</a></li>
+                    </div>
+                    <div class="footer-nav_list">
+                        <li id="nav-exit"><a href={% url 'accounts:logout' %}>sair</a></li>
+                    </div>
+                </div>
+                
+            </ul>
+
+            <div class="Menu-navbar">
+                <div class="line1"></div>
+                <div class="line2"></div>
+                <div class="line3"></div>
+            </div>
+            <div class="logo">Agendamento Online</div>
+            {% if usuario %}
+            <div class="welcome-nav">
+                <div>
+                    <img id='profile_img' src="{% static 'img/img_usuario.png' %}" alt="Foto de perfil aleatória">
+                </div>
+            </div>
+            {% else %}
+            <div class="auth">
+                <a href={% url 'accounts:login' %}>Entrar</a>
+            </div>
+            {% endif %}
+        </nav>
+    </header>
+
+    <section class="hero" id="home">
+        <h1>Agende sua consulta médica online</h1>
+        <p>Encontre os melhores médicos e agende suas consultas de forma rápida e fácil.</p>
+        <button onclick="window.location.href='login.html'">Agendar Agora</button>
+    </section>
+
+    <section class="features">
+        <div class="feature-card">
+            <h3>Encontre o médico certo</h3>
+            <p>Pesquise por especialidade, localização e avaliações.</p>
+        </div>
+        <div class="feature-card">
+            <h3>Agendamento fácil</h3>
+            <p>Agende suas consultas em poucos cliques.</p>
+        </div>
+        <div class="feature-card">
+            <h3>Lembretes de consulta</h3>
+            <p>Receba lembretes por e-mail e SMS para não perder suas consultas.</p>
+        </div>
+        <div class="feature-card">
+            <h3>Prontuários Online</h3>
+            <p>Acesse seu histórico médico de forma segura e online.</p>
+        </div>
+    </section>
+
+    <section class="about-us" id="about">
+        <h2>Sobre Nós</h2>
+        <p>Somos uma plataforma dedicada a facilitar o agendamento de consultas médicas, conectando pacientes e médicos de forma eficiente e acessível. Nossa missão é proporcionar uma experiência de saúde simplificada e de qualidade.</p>
+    </section>
+
+    <section class="contact" id="contact">
+        <h2>Contato</h2>
+        <p>Entre em contato conosco para tirar suas dúvidas ou obter mais informações.</p>
+        <p>Email: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="91f2feffe5f0e5fed1f0f6f4fff5f0fcf4ffe5febff2fefc">[email&#160;protected]</a></p>
+        <p>Telefone: (11) 1234-5678</p>
+    </section>
+
+    <footer>
+        <p>&copy;2024 Sistema de Agendamento de Consultas Médicas</p>
+    </footer>
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="script.js"></script>
+</body>
+
+</html>

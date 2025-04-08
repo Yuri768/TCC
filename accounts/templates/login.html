@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/login_styles.css' %}">
+</head>
+
+<body>
+    <div class="login-container">
+        <h2>Login</h2>
+        <form action="{% url 'accounts:login' %}" method="POST"> {% csrf_token %}
+            {% if status == '1'%}
+                
+                <div class="alert-danger" role="alert">
+                    Email não é valido
+                </div>
+            
+            {% elif status == '2'%}
+                
+                <div class="alert-danger" role="alert">
+                    Senha não é valida
+                </div>
+            
+            {% elif status == '3'%}
+                
+                <div class="alert-danger" role="alert">
+                    Usuario não encontrado
+                </div>
+            
+            {% elif status == '4'%}
+                
+                <div class="alert-danger" role="alert">
+                    Senha errada
+                </div>
+
+            {% endif %}
+            <div class="form-group">
+                <label for="gmail">Nome de usuário</label>
+                <input type="text" id="gmail" name="gmail" required placeholder="Digite seu gmail">
+            </div>
+            <div class="form-group">
+                <label for="senha">Senha</label>
+                <input type="password" id="senha" name="senha" required placeholder="Digite sua senha">
+            </div>
+            <button type="submit" class="login-btn">Login</button>
+        </form>
+        <p class="register-link">Não tem conta? <a href="{% url 'accounts:registrar' %}">Registre-se aqui</a></p>
+    </div>
+</body>
+
+</html>
+
