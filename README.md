@@ -1,9 +1,12 @@
 # TCC
 
-`pip install pymysql`, 
-`pip install bcrypt`, 
-`pip install validate-docbr`,
-`pip install cryptography`
+Esse projeto esta sendo desenvolvido usando python com django, mysql, html, css e javascript.
+
+
+Instalando todas as bibliotecas necessarias:
+
+
+`pip install django, pymysql, bcrypt, validate-docbr, cryptography`
 
 
 Para migrar o banco de dados é só rodar os seguintes comandos no terminal:
