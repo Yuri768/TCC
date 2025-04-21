@@ -3,21 +3,25 @@
 Esse projeto esta sendo desenvolvido usando python com django, mysql, html, css e javascript.
 
 
+
+Abrir o espaço virtual:
+
+(Cria o ambiente) `python -m venv venv`
+("Ativa" o ambiente) `./venv/Scripts/Activate`
+
+
+
 Instalando todas as bibliotecas necessarias:
 
 
 `pip install django, pymysql, bcrypt, validate-docbr, cryptography`
 
 
+
 Para migrar o banco de dados é só rodar os seguintes comandos no terminal:
 
 `python manage.py makemigrations` e `python manage.py migrate`
 
-
-Abrir o espaço virtual:
-
-(Cria o ambiente) `python -m venv venv`
-("Ativa" o ambiente) `./venv/Scripts/Activate`
 
 
 Abrir o servidor:

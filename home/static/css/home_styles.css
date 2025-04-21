@@ -15,12 +15,16 @@ body {
 }
 
 header {
-    background-color: #fff;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    position: sticky;
+    position: fixed;
     top: 0;
-    z-index: 100;
-    transition: background-color 0.3s ease;
+    width: 100%;
+    background: white;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    z-index: 900;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 nav {
@@ -32,125 +36,219 @@ nav {
     padding: 20px 20px;
 }
 
+/* Navbar Lateral */
 .nav-list {
-    list-style: none;
-    display: flex;
-    position: absolute;
-    top: 11vh;
-    left: 0;
-    width: 30vw;
+    position: fixed;
+    top: 0;
+    left: -300px;
+    width: 300px;
     height: 100vh;
-    background: #fff;
+    background: #2c3e50;
+    box-shadow: 5px 0 25px rgba(0,0,0,0.2);
+    transition: all 0.4s cubic-bezier(0.65, 0.05, 0.36, 1);
+    z-index: 1000;
+    display: flex;
     flex-direction: column;
-    align-items: left;
-    justify-content: flex-start;
+    color: white;
+}
+
+.nav-list.active {
+    left: 0;
 }
 
 .nav-list a {
-    color: #000000;
+    color: #ecf0f1;
     text-decoration: none;
+    transition: all 0.3s ease;
 }
 
-.nav-list a:hover {
-    text-decoration: underline;
-}
-
-.itens-nav_list{
-    padding-left: 20px;
-    padding-top: 10px;
+/* Itens do Menu */
+.itens-nav_list {
+    padding: 15px 0;
     display: flex;
     flex-direction: column;
+    flex-grow: 1;
 }
 
 .itens-nav_list li {
-    padding: 10px;
+    padding: 12px 25px;
+    transition: all 0.3s ease;
+    border-left: 4px solid transparent;
 }
 
+.itens-nav_list li:hover {
+    background-color: rgba(255,255,255,0.05);
+    border-left: 4px solid #3498db;
+}
 
+.itens-nav_list li a {
+    display: block;
+    font-size: 15px;
+}
+
+.itens-nav_list li:hover a {
+    color: #3498db;
+    transform: translateX(5px);
+}
+
+.footer-nav_list {
+    border-top: 1px solid rgba(255,255,255,0.1);
+    padding: 15px 0;
+}
+
+#nav-exit {
+    padding: 12px 25px;
+}
+
+#nav-exit a {
+    color: #e74c3c;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+}
+
+#nav-exit a:hover {
+    color: #c0392b;
+    text-decoration: none;
+}
+
+#nav-exit a::before {
+    content: "→";
+    margin-right: 10px;
+    transition: all 0.3s ease;
+}
+
+#nav-exit a:hover::before {
+    transform: translateX(-5px);
+}
+
+/* Menu Hamburguer */
 .Menu-navbar {
+    position: fixed;
+    left: 20px;
+    top: 20px;
+    width: 30px;
+    height: 20px;
     cursor: pointer;
+    z-index: 1100;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .Menu-navbar div {
-    width: 32px;
     height: 3px;
-    background: #000000;
-    margin: 8px;
+    width: 100%;
+    background-color: #3498db;
+    border-radius: 3px;
+    transition: all 0.3s ease;
 }
 
+
+/* Transformação em X quando ativo */
+.Menu-navbar.active .line1 {
+    transform: rotate(45deg) translate(5px, 5px);
+    background-color: #e74c3c;
+}
+
+.Menu-navbar.active .line2 {
+    opacity: 0;
+}
+
+.Menu-navbar.active .line3 {
+    transform: rotate(-45deg) translate(5px, -5px);
+    background-color: #e74c3c;
+}
 .logo {
-    font-size: 1.75em;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 18px;
     font-weight: bold;
     color: #3498db;
-    transition: color 0.3s ease, transform 0.3s;
+    transition: transform 0.1s ease;
 }
+
 
 .logo:hover {
     color: #2980b9;
-    transform: scale(1.05);
+    transform: translateX(-50%) scale(1.02);
 }
 
 
-.auth {
-    display: flex;
-    gap: 15px;
-}
 
 .auth a {
-    color: #fff;
-    text-decoration: none;
-    padding: 12px 25px;
-    border-radius: 8px;
-    border: none;
+    position: fixed;
+    right: 20px;
+    top: 15px;
     background-color: #3498db;
-    transition: background-color 0.3s ease, transform 0.2s, box-shadow 0.3s ease;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 6px;
+    text-decoration: none;
     font-weight: 500;
-    display: inline-block;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
 }
 
 .auth a:hover {
     background-color: #2980b9;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    text-decoration: none;
 }
 
+/* Área de Boas-Vindas */
 .welcome {
+    margin-top: 60px; /* Compensa a altura do header */
     display: flex;
     align-items: center;
-    background-color: #c2bdbd;
-    padding: 30px;
+    background-color: #34495e;
+    padding: 25px 20px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
 }
 
-.welcome > div:first-child{
-    margin-right: 10px;
+.welcome > div:first-child {
+    margin-right: 15px;
 }
 
-.welcome > div > p:last-child{
-    display: flex;
-    justify-content: center;
+.welcome > div > p:first-child {
+    font-size: 14px;
+    color: #bdc3c7;
+    margin-bottom: 5px;
 }
 
+.welcome > div > p:last-child {
+    font-size: 16px;
+    color: white;
+    font-weight: 500;
+}
 
-.welcome > div:first-child > img{
+.welcome > div:first-child > img {
     width: 60px;
-    height: auto;
+    height: 60px;
     border-radius: 50%;
-}
-
-.welcome > div > p{
-    margin: 0px;
-}
-
-.welcome-nav > div:first-child > img{
-    width: 60px;
-    height: auto;
-    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #3498db;
 }
 
 .welcome a {
     display: flex;
     align-items: center;
+    width: 100%;
+}
+
+/* Área do usuário no header */
+.welcome-nav {
+    position: fixed;
+    right: 20px;
+    top: 20px;
+    z-index: 1000;
+}
+
+.welcome-nav img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #3498db;
 }
 
 #profile_img {
@@ -160,6 +258,8 @@ nav {
 }
 
 #text-welcome {
+    font-size: 16px;
+    color: white;
     padding-left: 10px;
 }
 
@@ -175,7 +275,7 @@ nav {
     background: linear-gradient(135deg, #e0f2f7, #fff);
     text-align: center;
     padding: 120px 20px;
-    border-radius: 15px;
+    border-radius: 20px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
     margin: 30px auto;
     max-width: 90%;
@@ -236,7 +336,7 @@ nav {
 .feature-card {
     padding: 30px;
     background-color: #fff;
-    border-radius: 12px;
+    border-radius: 20px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     text-align: center;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
