@@ -25,13 +25,13 @@ def login(request):
         else:
             return redirect('/accounts/login/?status=2')
     
-        if not Usuario.objects.filter(email = email).exists():
+        if not Pessoa.objects.filter(email=email).exists():
             return redirect('/accounts/login/?status=3')
 
-        usuario = Usuario.objects.get(email = email)
+        pessoa = Pessoa.objects.get(email=email)
 
-        if bcrypt.checkpw(senha.encode('utf-8'), usuario.senha.encode('utf-8')):
-            request.session['usuario_id'] = usuario.pk
+        if bcrypt.checkpw(senha.encode('utf-8'), pessoa.senha.encode('utf-8')):
+            request.session['usuario_id'] = pessoa.id_pessoa
             return redirect('home:main')
         else:
             return redirect('/accounts/login/?status=4')
@@ -55,7 +55,7 @@ def registrar(request):
     if not validar_email(email):
         return redirect('/accounts/registrar/?status=1')
     
-    if Usuario.objects.filter(email = email).exists():
+    if Pessoa.objects.filter(email = email).exists():
         return redirect('/accounts/registrar/?status=2')
 
     
@@ -68,11 +68,12 @@ def registrar(request):
     else:
         return redirect('/accounts/registrar/?status=4')
     
-    
-    if not CPF().validate(cpf):
+    cpf_limpo = "".join(filter(str.isdigit, cpf))
+
+    if not CPF().validate(cpf_limpo):
         return redirect('/accounts/registrar/?status=5')
 
-    if Usuario.objects.filter(cpf = cpf).exists():
+    if Pessoa.objects.filter(cpf = cpf).exists():
         return redirect('/accounts/registrar/?status=6')
 
     if senha != None:
@@ -102,19 +103,31 @@ def registrar(request):
     cpf_formatado = formatandoCPF(cpf)
     cpf = cpf_formatado
 
-    usuario = Usuario.objects.create(
-        email=email,
-        data_nascimento=data_nascimento,
-        nome=nome,
-        senha=senha_hashed_str,
-        cpf=cpf,
-        data_cadastro= timezone.now(),
-        endereco=endereco
-    )
+    try:
+        # 1. Cria a Pessoa
+        pessoa = Pessoa.objects.create(
+            email=email,
+            data_nascimento=data_nascimento,
+            nome=nome,
+            senha=senha_hashed_str,
+            cpf=cpf,
+            type='USUARIO'
+        )
 
-    request.session['usuario_id'] = usuario.pk
-    
-    return redirect('home:main')
+        # 2. Cria o Usuario relacionado
+        usuario = Usuario.objects.create(
+            id_usuario=pessoa.id_pessoa,  # Relaciona com a Pessoa
+            data_cadastro = timezone.now().date(),
+            endereco=endereco
+        )
+
+        request.session['usuario_id'] = pessoa.id_pessoa
+        return redirect('home:main')
+    except Exception as e:
+        import logging
+        logger = logging.getLogger(__name__)
+        logger.error(f"Erro no registro: {str(e)}", exc_info=True)
+        return redirect('/accounts/registrar/?status=99')
 
 
 def logout(request):

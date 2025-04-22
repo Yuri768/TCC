@@ -1,0 +1,84 @@
+.agendamento-container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.1);
+}
+
+.step {
+    margin-bottom: 2rem;
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+.step.active {
+    opacity: 1;
+    pointer-events: all;
+}
+
+select {
+    width: 100%;
+    padding: 0.8rem;
+    border: 2px solid #2980b9;
+    border-radius: 5px;
+    font-size: 1rem;
+}
+
+.calendar {
+    border: 2px solid #2980b9;
+    border-radius: 5px;
+    padding: 1rem;
+}
+
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+}
+
+.calendar-day {
+    padding: 1rem;
+    text-align: center;
+    border: 1px solid #ddd;
+    cursor: pointer;
+    background: #f8f9fa;
+}
+
+.calendar-day.disabled {
+    background: #e9ecef;
+    cursor: not-allowed;
+}
+
+.calendar-day.available {
+    background: #2980b9;
+    color: white;
+}
+
+#horarios-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 10px;
+}
+
+.time-slot {
+    padding: 0.5rem;
+    border: 2px solid #2980b9;
+    border-radius: 5px;
+    background: white;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.time-slot.selected {
+    background: #2980b9;
+    color: white;
+}

@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="agendamento-container">
+    <h1>Agendar Consulta</h1>
+    
+    <!-- Passo 1: Seleção de Serviço -->
+    <div class="step active" id="step-servico">
+        <h2>1. Escolha o Serviço</h2>
+        <select id="select-servico">
+            <option value="">Selecione um serviço...</option>
+            {% for servico in servicos %}
+            <option value="{{ servico.id }}">{{ servico.nome }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <!-- Passo 2: Seleção de Médico -->
+    <div class="step" id="step-medico">
+        <h2>2. Escolha o Médico</h2>
+        <select id="select-medico" disabled>
+            <option value="">Carregando médicos...</option>
+        </select>
+    </div>
+
+    <!-- Passo 3: Seleção de Data -->
+    <div class="step" id="step-data">
+        <h2>3. Escolha a Data</h2>
+        <div class="calendar">
+            <div class="calendar-header">
+                <button id="prev-month">&lt;</button>
+                <span id="current-month"></span>
+                <button id="next-month">&gt;</button>
+            </div>
+            <div class="calendar-grid" id="calendar"></div>
+        </div>
+    </div>
+
+    <!-- Passo 4: Seleção de Horário -->
+    <div class="step" id="step-horario">
+        <h2>4. Escolha o Horário</h2>
+        <div id="horarios-container"></div>
+    </div>
+
+    <button id="confirmar" disabled>Confirmar Agendamento</button>
+</div>
+
+<link rel="stylesheet" href="{% static 'css/agendamento.css' %}">
+<script src="{% static 'js/agendamento.js' %}"></script>
+{% endblock %}
