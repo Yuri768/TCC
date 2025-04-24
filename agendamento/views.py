@@ -1,25 +1,49 @@
-# agendamento/views.py
-from .models import Medico, Horarios
-from datetime import datetime, timedelta
+from django.shortcuts import render
+from django.http import JsonResponse
+
+def agendar_consulta(request):
+    return render(request, 'agendamento/agendamento.html')
 
 def get_medicos(request):
+    # Dados fictícios - substitua por consulta ao banco de dados depois
     servico_id = request.GET.get('servico_id')
-    # Aqui você precisaria adaptar para sua lógica de negócios
-    medicos = Medico.objects.filter(...)
-    return render(...)
+    medicos = []
+    
+    if servico_id == 'cardiologia':
+        medicos = [
+            {'id': 1, 'nome': 'Dr. Carlos Silva'},
+            {'id': 2, 'nome': 'Dra. Ana Souza'}
+        ]
+    elif servico_id == 'dermatologia':
+        medicos = [
+            {'id': 3, 'nome': 'Dr. Marcos Oliveira'},
+            {'id': 4, 'nome': 'Dra. Juliana Costa'}
+        ]
+    
+    options = '<option value="">Selecione um médico...</option>'
+    for medico in medicos:
+        options += f'<option value="{medico["id"]}">{medico["nome"]}</option>'
+    
+    return JsonResponse({'options': options})
 
 def get_horarios(request):
+    # Dados fictícios - substitua por consulta ao banco de dados depois
     medico_id = request.GET.get('medico_id')
     data = request.GET.get('data')
     
-    # Converter a string da data para objeto date
-    data_obj = datetime.strptime(data, '%Y-%m-%d').date()
+    horarios = ['08:00', '09:00', '10:00', '11:00', '14:00', '15:00', '16:00']
     
-    # Filtrar horários disponíveis
-    horarios = Horarios.objects.filter(
-        id_medico=medico_id,
-        dia__date=data_obj,
-        inicio__gte=(datetime.now() + timedelta(hours=1)).time() if data_obj == datetime.now().date() else datetime.min.time()
-    ).order_by('inicio')
+    time_slots = []
+    for horario in horarios:
+        time_slots.append({
+            'id': horario.replace(':', ''),
+            'horario': horario
+        })
     
-    return render(...)
+    return JsonResponse({'horarios': time_slots})
+
+def AgendarConsultaView(request):
+    # Implementação básica - substitua por lógica real depois
+    if request.method == 'POST':
+        return JsonResponse({'status': 'success', 'message': 'Agendamento realizado com sucesso!'})
+    return JsonResponse({'status': 'error'}, status=400)

@@ -40,7 +40,8 @@ class Usuario(models.Model):
 class Medico(Pessoa):
     crm = models.CharField(max_length=255, null=False)
     id_clinica = models.ForeignKey('Clinica', on_delete=models.SET_NULL, db_column='id_clinica', null=True, blank=True)
-
+    tipo_medico = models.CharField(max_length=45, null=False, blank=True)
+    
     class Meta:
         managed = False  # Adicionado para evitar migrações
         db_table = 'medico'

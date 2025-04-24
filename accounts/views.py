@@ -45,7 +45,7 @@ def registrar(request):
         return render(request, 'registrar.html', {'status': status})
     elif request.method == 'POST':
         email = request.POST.get('email')
-        data_nascimento = request.POST.get('data_nascimento')
+        data_nascimento_str = request.POST.get('data_nascimento')
         nome = request.POST.get('nome')
         senha = request.POST.get('senha')
         cpf = request.POST.get('cpf')
@@ -82,7 +82,7 @@ def registrar(request):
     else:
         return redirect('/accounts/registrar/?status=7')
     
-    if not data_nascimento:
+    if not data_nascimento_str:
         return redirect('/accounts/registrar/?status=8')
 
                 
@@ -97,13 +97,15 @@ def registrar(request):
     #?status=8 (Erro de data de nascimento, data de nascimento invalida)
 
 
-    senha_hashed = bcrypt.hashpw(senha.encode('utf-8'), bcrypt.gensalt())
-    senha_hashed_str = senha_hashed.decode('utf-8')
-    
-    cpf_formatado = formatandoCPF(cpf)
-    cpf = cpf_formatado
-
     try:
+        senha_hashed = bcrypt.hashpw(senha.encode('utf-8'), bcrypt.gensalt())
+        senha_hashed_str = senha_hashed.decode('utf-8')
+        
+        cpf_formatado = formatandoCPF(cpf)
+        cpf = cpf_formatado
+
+        data_nascimento = datetime.strptime(data_nascimento_str, '%Y-%m-%d').date()
+
         # 1. Cria a Pessoa
         pessoa = Pessoa.objects.create(
             email=email,
@@ -116,8 +118,7 @@ def registrar(request):
 
         # 2. Cria o Usuario relacionado
         usuario = Usuario.objects.create(
-            id_usuario=pessoa.id_pessoa,  # Relaciona com a Pessoa
-            data_cadastro = timezone.now().date(),
+            id_usuario=pessoa.id_pessoa,
             endereco=endereco
         )
 

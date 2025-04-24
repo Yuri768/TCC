@@ -1,51 +1,154 @@
-{% extends 'base.html' %}
-{% load static %}
-
-{% block content %}
-<div class="agendamento-container">
-    <h1>Agendar Consulta</h1>
-    
-    <!-- Passo 1: Seleção de Serviço -->
-    <div class="step active" id="step-servico">
-        <h2>1. Escolha o Serviço</h2>
-        <select id="select-servico">
-            <option value="">Selecione um serviço...</option>
-            {% for servico in servicos %}
-            <option value="{{ servico.id }}">{{ servico.nome }}</option>
-            {% endfor %}
-        </select>
-    </div>
-
-    <!-- Passo 2: Seleção de Médico -->
-    <div class="step" id="step-medico">
-        <h2>2. Escolha o Médico</h2>
-        <select id="select-medico" disabled>
-            <option value="">Carregando médicos...</option>
-        </select>
-    </div>
-
-    <!-- Passo 3: Seleção de Data -->
-    <div class="step" id="step-data">
-        <h2>3. Escolha a Data</h2>
-        <div class="calendar">
-            <div class="calendar-header">
-                <button id="prev-month">&lt;</button>
-                <span id="current-month"></span>
-                <button id="next-month">&gt;</button>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agendamento Médico</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/static/css/agendamento.css">
+</head>
+<body>
+    <div class="agendamento-wrapper">
+        <div class="agendamento-container">
+            <div class="header">
+                <h1><i class="fas fa-calendar-alt"></i> Agendamento Médico</h1>
+                <div class="progress-steps">
+                    <div class="step-indicator active" data-step="1"><span>1</span></div>
+                    <div class="step-indicator" data-step="2"><span>2</span></div>
+                    <div class="step-indicator" data-step="3"><span>3</span></div>
+                    <div class="step-indicator" data-step="4"><span>4</span></div>
+                </div>
             </div>
-            <div class="calendar-grid" id="calendar"></div>
+            
+            <!-- Passo 1: Tipo de Serviço -->
+            <div class="step active" id="step-servico" data-step="1">
+                <h2><i class="fas fa-stethoscope"></i> Escolha o Tipo de Serviço</h2>
+                <div class="service-options">
+                    <div class="service-card" data-service="cardiologia">
+                        <i class="fas fa-heartbeat"></i>
+                        <h3>Cardiologia</h3>
+                    </div>
+                    <div class="service-card" data-service="dermatologia">
+                        <i class="fas fa-allergies"></i>
+                        <h3>Dermatologia</h3>
+                    </div>
+                    <div class="service-card" data-service="ortopedia">
+                        <i class="fas fa-bone"></i>
+                        <h3>Ortopedia</h3>
+                    </div>
+                    <div class="service-card" data-service="pediatria">
+                        <i class="fas fa-baby"></i>
+                        <h3>Pediatria</h3>
+                    </div>
+                </div>
+                <div class="step-actions">
+                    <button class="btn-voltar" onclick="voltarEtapa()" style="display: none;">
+                        <i class="fas fa-arrow-left"></i> Voltar
+                    </button>
+                </div>
+            </div>
+
+            <!-- Passo 2: Médico -->
+            <div class="step" id="step-medico" data-step="2">
+                <h2><i class="fas fa-user-md"></i> Escolha o Médico</h2>
+                <div class="doctor-options" id="doctor-options">
+                    <p>Selecione um tipo de serviço primeiro</p>
+                </div>
+                <div class="step-actions">
+                    <button class="btn-voltar" onclick="voltarEtapa()">
+                        <i class="fas fa-arrow-left"></i> Voltar
+                    </button>
+                </div>
+            </div>
+
+            <!-- Passo 3: Data -->
+            <div class="step" id="step-data" data-step="3">
+                <h2><i class="far fa-calendar-alt"></i> Escolha a Data</h2>
+                <div class="calendar-container">
+                    <div class="calendar-header">
+                        <button id="prev-month"><i class="fas fa-chevron-left"></i></button>
+                        <h3 id="current-month"></h3>
+                        <button id="next-month"><i class="fas fa-chevron-right"></i></button>
+                    </div>
+                    <div class="weekdays">
+                        <div>Dom</div>
+                        <div>Seg</div>
+                        <div>Ter</div>
+                        <div>Qua</div>
+                        <div>Qui</div>
+                        <div>Sex</div>
+                        <div>Sáb</div>
+                    </div>
+                    <div class="calendar-grid" id="calendar"></div>
+                </div>
+                <div class="step-actions">
+                    <button class="btn-voltar" onclick="voltarEtapa()">
+                        <i class="fas fa-arrow-left"></i> Voltar
+                    </button>
+                </div>
+            </div>
+
+            <!-- Passo 4: Horário -->
+            <div class="step" id="step-horario" data-step="4">
+                <h2><i class="far fa-clock"></i> Escolha o Horário</h2>
+                <div class="time-slots" id="time-slots">
+                    <p>Selecione uma data primeiro</p>
+                </div>
+                <div class="step-actions">
+                    <button class="btn-voltar" onclick="voltarEtapa()">
+                        <i class="fas fa-arrow-left"></i> Voltar
+                    </button>
+                </div>
+            </div>
+
+            <!-- Resumo e Confirmação -->
+            <div class="summary">
+                <h2><i class="fas fa-clipboard-check"></i> Resumo do Agendamento</h2>
+                <div class="summary-details">
+                    <div><strong>Serviço:</strong> <span id="summary-service">Não selecionado</span></div>
+                    <div><strong>Médico:</strong> <span id="summary-doctor">Não selecionado</span></div>
+                    <div><strong>Data:</strong> <span id="summary-date">Não selecionada</span></div>
+                    <div><strong>Horário:</strong> <span id="summary-time">Não selecionado</span></div>
+                </div>
+                <button id="confirm-btn" disabled>
+                    <i class="fas fa-check-circle"></i> Confirmar Agendamento
+                </button>
+            </div>
         </div>
     </div>
 
-    <!-- Passo 4: Seleção de Horário -->
-    <div class="step" id="step-horario">
-        <h2>4. Escolha o Horário</h2>
-        <div id="horarios-container"></div>
-    </div>
-
-    <button id="confirmar" disabled>Confirmar Agendamento</button>
-</div>
-
-<link rel="stylesheet" href="{% static 'css/agendamento.css' %}">
-<script src="{% static 'js/agendamento.js' %}"></script>
-{% endblock %}
+    <script src="/static/js/agendamento.js"></script>
+    <script>
+        // Função temporária até integrar com o JS principal
+        function voltarEtapa() {
+            // Esta função será substituída pela versão completa no agendamento.js
+            console.log("Voltando para etapa anterior...");
+            
+            // Encontra a etapa atual
+            const currentStep = document.querySelector('.step.active');
+            const currentStepNumber = parseInt(currentStep.dataset.step);
+            
+            if (currentStepNumber > 1) {
+                // Esconde etapa atual
+                currentStep.classList.remove('active');
+                
+                // Mostra etapa anterior
+                const prevStep = document.querySelector(`.step[data-step="${currentStepNumber - 1}"]`);
+                prevStep.classList.add('active');
+                
+                // Atualiza indicadores de progresso
+                document.querySelectorAll('.step-indicator').forEach(indicator => {
+                    if (parseInt(indicator.dataset.step) < currentStepNumber) {
+                        indicator.classList.add('active');
+                    } else {
+                        indicator.classList.remove('active');
+                    }
+                });
+                
+                // Rolando para o topo da etapa
+                prevStep.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+    </script>
+</body>
+</html>

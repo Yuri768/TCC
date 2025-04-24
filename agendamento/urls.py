@@ -1,9 +1,11 @@
-# agendamento/urls.py
 from django.urls import path
-from . import views
+from .views import agendar_consulta, get_medicos, get_horarios, AgendarConsultaView
+
+app_name = 'agendamento'
 
 urlpatterns = [
-    path('agendar/', views.agendar_consulta, name='agendar'),
-    path('get_medicos/', views.get_medicos, name='get_medicos'),
-    path('get_horarios/', views.get_horarios, name='get_horarios'),
+    path('', agendar_consulta, name='agendar'),
+    path('get_medicos/', get_medicos, name='get_medicos'),
+    path('get_horarios/', get_horarios, name='get_horarios'),
+    path('confirmar/', AgendarConsultaView, name='confirmar'),
 ]
