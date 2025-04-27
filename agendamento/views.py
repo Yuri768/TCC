@@ -47,3 +47,7 @@ def AgendarConsultaView(request):
     if request.method == 'POST':
         return JsonResponse({'status': 'success', 'message': 'Agendamento realizado com sucesso!'})
     return JsonResponse({'status': 'error'}, status=400)
+
+def historico_view(request):
+    if request.method == 'GET':
+        return render(request, 'agendamento/historico.html')

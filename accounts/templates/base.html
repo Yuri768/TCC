@@ -4,13 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Agendamento Médico</title>
-    <link rel="stylesheet" href="{% static 'css/agendamento.css' %}">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/conta_usuario.css' %}">
 </head>
 <body>
     <div class="container">
         {% block content %}
         {% endblock %}
     </div>
-    <script src="{% static 'js/agendamento.js' %}"></script>
 </body>
 </html>

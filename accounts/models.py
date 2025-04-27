@@ -3,7 +3,7 @@ from django.db import models
 class Pessoa(models.Model):
     id_pessoa = models.AutoField(primary_key=True)
     email = models.CharField(max_length=255, null=False)
-    data_nascimento = models.DateTimeField(null=False)
+    data_nascimento = models.DateField(null=False)
     nome = models.CharField(max_length=255, null=False)
     senha = models.CharField(max_length=255, null=False)
     cpf = models.CharField(max_length=14, null=False)
@@ -20,7 +20,7 @@ class Usuario(models.Model):
         primary_key=True,
         db_column='id_usuario'
     )
-    data_cadastro = models.DateField(max_length=255, null=False)
+    data_cadastro = models.DateTimeField(auto_now_add=True, null=False)
     endereco = models.CharField(max_length=255, null=False)
 
     class Meta:

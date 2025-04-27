@@ -41,13 +41,16 @@
                         {% endif %}
                     </div>
                     <div class="itens-nav_list">
-                        <li><a href="/">Minha conta</a></li>
-                        <li><a href="/">Agendar</a></li>
-                        <li><a href="/">Historico de consultas</a></li>
+                        <li><a href="{% url 'home:main' %}">Home</a></li>
+                        <li><a href="{% url 'accounts:minha_conta' %}">Minha conta</a></li>
+                        <li><a href="{% url 'agendamento:agendar' %}">Agendar</a></li>
+                        <li><a href="{% url 'agendamento:historico' %}">Historico de consultas</a></li>
                     </div>
+                    {% if usuario %}
                     <div class="footer-nav_list">
                         <li id="nav-exit"><a href={% url 'accounts:logout' %}>sair</a></li>
                     </div>
+                    {% endif %}
                 </div>
                 
             </ul>

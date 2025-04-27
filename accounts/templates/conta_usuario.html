@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="main-content">
+    <div class="header">
+        <div class="user-info">
+            <img src="https://via.placeholder.com/40" alt="Usuário">
+            <span>Olá, {{ nome }}</span>
+        </div>
+        <h1>Minha Conta</h1>
+    </div>
+
+    <div class="account-info-container">
+        <div class="account-card">
+            <div class="account-section">
+                <h2><i class="fas fa-user"></i> Informações Pessoais</h2>
+                <div class="info-row">
+                    <span class="info-label">Nome Completo:</span>
+                    <span class="info-value">{{ usuario.nome }}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">CPF:</span>
+                    <span class="info-value">{{ usuario.cpf }}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Data de Nascimento:</span>
+                    <span class="info-value">{{ usuario.data_nascimento }}</span>
+                </div>
+            </div>
+
+            <div class="account-section">
+                <h2><i class="fas fa-address-card"></i> Informações de Contato</h2>
+                <div class="info-row">
+                    <span class="info-label">E-mail:</span>
+                    <span class="info-value">{{ usuario.email }}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Endereço:</span>
+                    <span class="info-value">{{ usuario.endereco }}</span>
+                </div>
+            </div>
+
+            <div class="account-section">
+                <h2><i class="fas fa-calendar-alt"></i> Informações da Conta</h2>
+                <div class="info-row">
+                    <span class="info-label">Data de Cadastro:</span>
+                    <span class="info-value">{{ usuario.data_cadastro }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

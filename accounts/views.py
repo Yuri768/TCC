@@ -118,7 +118,7 @@ def registrar(request):
 
         # 2. Cria o Usuario relacionado
         usuario = Usuario.objects.create(
-            id_usuario=pessoa.id_pessoa,
+            id_usuario=pessoa,
             endereco=endereco
         )
 
@@ -128,8 +128,52 @@ def registrar(request):
         import logging
         logger = logging.getLogger(__name__)
         logger.error(f"Erro no registro: {str(e)}", exc_info=True)
+        # Adicione isto para debug temporário
+        print(f"ERRO DETALHADO: {str(e)}")
         return redirect('/accounts/registrar/?status=99')
 
+
+def minha_conta(request):
+    usuario_id = request.session.get('usuario_id')
+    
+    context = {}
+    
+    if usuario_id:
+        try:
+            # Primeiro verifica se a Pessoa existe
+            pessoa = Pessoa.objects.get(id_pessoa=usuario_id)
+            
+            # Cria a estrutura básica do usuário com os dados da Pessoa
+            usuario_data = {
+                'nome': pessoa.nome,
+                'email': pessoa.email,
+                'cpf': pessoa.cpf,
+                'data_nascimento': pessoa.data_nascimento.strftime('%d/%m/%Y') if pessoa.data_nascimento else None
+            }
+            
+            # Depois tenta obter o Usuario relacionado para complementar os dados
+            try:
+                usuario = Usuario.objects.get(id_usuario=usuario_id)
+                usuario_data.update({
+                    'endereco': usuario.endereco,
+                    'data_cadastro': usuario.data_cadastro.strftime('%d/%m/%Y') if usuario.data_cadastro else None
+                })
+            except Usuario.DoesNotExist:
+                # Se não encontrar o Usuario, usa valores padrão
+                usuario_data.update({
+                    'endereco': 'Não informado',
+                    'data_cadastro': None
+                })
+                # Remove a sessão pois o usuário está incompleto
+                del request.session['usuario_id']
+                
+            context['usuario'] = usuario_data
+                
+        except Pessoa.DoesNotExist:
+            # Se a Pessoa não existir, limpa a sessão
+            del request.session['usuario_id']
+    
+    return render(request, 'conta_usuario.html', context)
 
 def logout(request):
     if 'usuario_id' in request.session:
