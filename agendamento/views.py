@@ -1,5 +1,6 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import JsonResponse
+from accounts.models import Pessoa, Medico, Usuario
 
 def agendar_consulta(request):
     return render(request, 'agendamento/agendamento.html')
@@ -50,4 +51,47 @@ def AgendarConsultaView(request):
 
 def historico_view(request):
     if request.method == 'GET':
-        return render(request, 'agendamento/historico.html')
+        
+        usuario_id = request.session.get('usuario_id') 
+
+        if not usuario_id:
+            return redirect('accounts:login')
+
+        context = {}
+        
+        if usuario_id:
+            try:
+                # Primeiro verifica se a Pessoa existe
+                pessoa = Pessoa.objects.get(id_pessoa=usuario_id)
+                
+                # Cria a estrutura básica do usuário com os dados da Pessoa
+                usuario_data = {
+                    'nome': pessoa.nome,
+                    'email': pessoa.email,
+                    'cpf': pessoa.cpf,
+                    'data_nascimento': pessoa.data_nascimento.strftime('%d/%m/%Y') if pessoa.data_nascimento else None
+                }
+                
+                # Depois tenta obter o Usuario relacionado para complementar os dados
+                try:
+                    usuario = Usuario.objects.get(id_usuario=usuario_id)
+                    usuario_data.update({
+                        'endereco': usuario.endereco,
+                        'data_cadastro': usuario.data_cadastro.strftime('%d/%m/%Y') if usuario.data_cadastro else None
+                    })
+                except Usuario.DoesNotExist:
+                    # Se não encontrar o Usuario, usa valores padrão
+                    usuario_data.update({
+                        'endereco': 'Não informado',
+                        'data_cadastro': None
+                    })
+                    # Remove a sessão pois o usuário está incompleto
+                    del request.session['usuario_id']
+                    
+                context['usuario'] = usuario_data
+                    
+            except Pessoa.DoesNotExist:
+                # Se a Pessoa não existir, limpa a sessão
+                del request.session['usuario_id']
+        
+        return render(request, 'agendamento/historico.html', context)

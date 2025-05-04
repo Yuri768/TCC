@@ -42,7 +42,11 @@
                     </div>
                     <div class="itens-nav_list">
                         <li><a href="{% url 'home:main' %}">Home</a></li>
-                        <li><a href="{% url 'accounts:minha_conta' %}">Minha conta</a></li>
+                        {% if usuario %}
+                            <li><a href="{% url 'accounts:minha_conta' %}">Minha conta</a></li>
+                        {% else %}
+                            <li><a href="{% url 'accounts:login' %}">Minha conta</a></li>
+                        {% endif %}
                         <li><a href="{% url 'agendamento:agendar' %}">Agendar</a></li>
                         <li><a href="{% url 'agendamento:historico' %}">Historico de consultas</a></li>
                     </div>

@@ -420,6 +420,29 @@ body {
     cursor: not-allowed;
 }
 
+.logout-button-container {
+    text-align: center;
+    margin-top: 40px;
+}
+
+.logout-button {
+    background-color: #2980b9;
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 10px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    text-decoration: none; /* <- importante para tirar o sublinhado do <a> */
+    display: inline-block;  /* <- mantém o espaçamento de botão */
+    text-align: center;
+}
+
+.logout-button:hover {
+    background-color: #1c5d84;
+}
+
 /* Responsividade */
 @media (max-width: 768px) {
     .service-options {

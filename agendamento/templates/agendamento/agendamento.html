@@ -114,41 +114,12 @@
                     <i class="fas fa-check-circle"></i> Confirmar Agendamento
                 </button>
             </div>
+            <div class="logout-button-container">
+                <a href="{% url 'home:main' %}" class="logout-button" style="margin-right: 15px;">Voltar</a>
+            </div>
         </div>
     </div>
 
     <script src="/static/js/agendamento.js"></script>
-    <script>
-        // Função temporária até integrar com o JS principal
-        function voltarEtapa() {
-            // Esta função será substituída pela versão completa no agendamento.js
-            console.log("Voltando para etapa anterior...");
-            
-            // Encontra a etapa atual
-            const currentStep = document.querySelector('.step.active');
-            const currentStepNumber = parseInt(currentStep.dataset.step);
-            
-            if (currentStepNumber > 1) {
-                // Esconde etapa atual
-                currentStep.classList.remove('active');
-                
-                // Mostra etapa anterior
-                const prevStep = document.querySelector(`.step[data-step="${currentStepNumber - 1}"]`);
-                prevStep.classList.add('active');
-                
-                // Atualiza indicadores de progresso
-                document.querySelectorAll('.step-indicator').forEach(indicator => {
-                    if (parseInt(indicator.dataset.step) < currentStepNumber) {
-                        indicator.classList.add('active');
-                    } else {
-                        indicator.classList.remove('active');
-                    }
-                });
-                
-                // Rolando para o topo da etapa
-                prevStep.scrollIntoView({ behavior: 'smooth' });
-            }
-        }
-    </script>
 </body>
 </html>

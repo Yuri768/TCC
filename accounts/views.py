@@ -85,18 +85,6 @@ def registrar(request):
     if not data_nascimento_str:
         return redirect('/accounts/registrar/?status=8')
 
-                
-
-    #?status=1 (Erro de email, email não é valido)
-    #?status=2 (Erro de email, email ja existe)
-    #?status=3 (Erro de nome, nome não pode conter numeros)
-    #?status=4 (Erro de nome, nome pequeno de mais ou nulo)
-    #?status=5 (Erro de cpf, cpf não é valido)
-    #?status=6 (Erro de cpf, cpf Já esta cadastrado em uma conta)
-    #?status=7 (Erro de senha, senha muito pequena)
-    #?status=8 (Erro de data de nascimento, data de nascimento invalida)
-
-
     try:
         senha_hashed = bcrypt.hashpw(senha.encode('utf-8'), bcrypt.gensalt())
         senha_hashed_str = senha_hashed.decode('utf-8')
@@ -134,8 +122,12 @@ def registrar(request):
 
 
 def minha_conta(request):
-    usuario_id = request.session.get('usuario_id')
-    
+
+    usuario_id = request.session.get('usuario_id') 
+
+    if not usuario_id:
+        return redirect('accounts:login')
+
     context = {}
     
     if usuario_id:

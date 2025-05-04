@@ -3,15 +3,18 @@
 {% block content %}
 <div class="main-content">
     <div class="header">
-        <div class="user-info">
-            <img src="https://via.placeholder.com/40" alt="Usuário">
-            <span>Olá, {{ nome }}</span>
-        </div>
         <h1>Minha Conta</h1>
+        <div class="user-info">
+            {% load static %}
+            <img id="profile_img" src="{% static 'img/img_usuario.png' %}" alt="Usuário">
+            <span>Olá, {{ usuario.nome }}</span>
+        </div>
     </div>
 
     <div class="account-info-container">
         <div class="account-card">
+
+            <!-- Informações Pessoais -->
             <div class="account-section">
                 <h2><i class="fas fa-user"></i> Informações Pessoais</h2>
                 <div class="info-row">
@@ -28,6 +31,7 @@
                 </div>
             </div>
 
+            <!-- Informações de Contato -->
             <div class="account-section">
                 <h2><i class="fas fa-address-card"></i> Informações de Contato</h2>
                 <div class="info-row">
@@ -40,12 +44,19 @@
                 </div>
             </div>
 
+            <!-- Informações da Conta -->
             <div class="account-section">
                 <h2><i class="fas fa-calendar-alt"></i> Informações da Conta</h2>
                 <div class="info-row">
                     <span class="info-label">Data de Cadastro:</span>
                     <span class="info-value">{{ usuario.data_cadastro }}</span>
                 </div>
+            </div>
+
+            <!-- Botão de Sair -->
+            <div class="logout-button-container">
+                <a href="{% url 'home:main' %}" class="logout-button" style="margin-right: 15px;">Voltar</a>
+                <a href="{% url 'accounts:logout' %}" class="logout-button">Sair da Conta</a>
             </div>
         </div>
     </div>

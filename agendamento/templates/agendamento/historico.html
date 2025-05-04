@@ -19,7 +19,11 @@
         </div>
         <ul class="sidebar-menu">
             <li><a href="{% url 'home:main' %}"><i class="fas fa-home"></i> Home</a></li>
-            <li><a href="#"><i class="fas fa-user"></i> Minha conta</a></li>
+            {% if usuario %}
+            <li><a href="{% url 'accounts:minha_conta'%}"><i class="fas fa-home"></i> Minha conta</a></li>
+            {% else %}
+            <li><a href="{% url 'accounts:login'%}"><i class="fas fa-home"></i> Minha conta</a></li>
+            {% endif %}
             <li><a href="{% url 'agendamento:agendar' %}"><i class="fas fa-calendar-plus"></i> Agendar</a></li>
             <li><a href="{% url 'agendamento:historico' %}" class="active"><i class="fas fa-history"></i> Histórico</a></li>
         </ul>
@@ -29,8 +33,9 @@
     <main class="main-content">
         <div class="header">
             <div class="user-info">
-                <img src="https://via.placeholder.com/40" alt="Usuário">
-                <span>Olá, Usuário Paciente</span>
+                {% load static %}
+                <img src="{% static 'img/img_usuario.png' %}" alt="Usuário">
+                <span>Olá, {{ usuario.nome }} </span>
             </div>
             <h1>Histórico de Consultas</h1>
         </div>

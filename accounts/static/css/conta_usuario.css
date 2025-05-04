@@ -1,60 +1,113 @@
-/* Estilos específicos para a tela Minha Conta */
+body {
+    background-color: #ffffff;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #2c3e50;
+    margin: 0;
+    padding: 0;
+}
+
+.main-content {
+    padding: 40px 20px;
+    background-color: #ecf6fb;
+    min-height: 100vh;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 30px;
+    border-bottom: 2px solid #2980b9;
+    padding-bottom: 10px;
+}
+
+#profile_img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #3498db;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1rem;
+    color: #2980b9;
+}
+
+h1 {
+    font-size: 2rem;
+    color: #2980b9;
+}
+
 .account-info-container {
-    max-width: 800px;
-    margin: 0 auto;
+    display: flex;
+    justify-content: center;
 }
 
 .account-card {
     background-color: white;
-    border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     padding: 30px;
+    border-radius: 16px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 800px;
 }
 
 .account-section {
     margin-bottom: 30px;
-    padding-bottom: 20px;
-    border-bottom: 1px solid #eee;
-}
-
-.account-section:last-child {
-    border-bottom: none;
-    margin-bottom: 0;
-    padding-bottom: 0;
 }
 
 .account-section h2 {
-    color: #2c3e50;
-    margin-bottom: 20px;
-    font-size: 1.3rem;
+    font-size: 1.4rem;
+    color: #2980b9;
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
+    margin-bottom: 15px;
+    border-left: 4px solid #2980b9;
+    padding-left: 10px;
 }
 
 .info-row {
     display: flex;
-    margin-bottom: 15px;
+    justify-content: space-between;
+    margin: 8px 0;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 6px;
+    color: #2c3e50;
 }
 
 .info-label {
-    font-weight: bold;
-    color: #2c3e50;
-    width: 180px;
+    font-weight: 600;
+    color: #34495e;
 }
 
 .info-value {
-    flex: 1;
     color: #555;
 }
 
-@media (max-width: 768px) {
-    .info-row {
-        flex-direction: column;
-    }
-    
-    .info-label {
-        width: 100%;
-        margin-bottom: 5px;
-    }
+.logout-button-container {
+    text-align: center;
+    margin-top: 40px;
+}
+
+.logout-button {
+    background-color: #2980b9;
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 10px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    text-decoration: none; /* <- importante para tirar o sublinhado do <a> */
+    display: inline-block;  /* <- mantém o espaçamento de botão */
+    text-align: center;
+}
+
+.logout-button:hover {
+    background-color: #1c5d84;
 }
