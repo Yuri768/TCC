@@ -45,7 +45,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'accounts',
-    'home'
+    'home',
+    'agendamento'
 ]
 
 MIDDLEWARE = [
@@ -85,11 +86,14 @@ WSGI_APPLICATION = 'core.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',  # Usando o MySQL
-        'NAME': 'tcc',               # Nome do banco de dados
+        'NAME': 'tccjava',               # Nome do banco de dados
         'USER': 'root',                     # Usuário do MySQL
         'PASSWORD': 'root',                   # Senha do MySQL
         'HOST': 'localhost',                   # Host do MySQL (geralmente 'localhost')
         'PORT': '3306',                        # Porta do MySQL (padrão é 3306)
+        'OPTIONS': {
+            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+        },
     }
 }
 
@@ -118,7 +122,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'pt-br'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'America/Sao_Paulo'
 
 USE_I18N = True
 
@@ -131,3 +135,14 @@ STATIC_URL = '/static/'
 ##]
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+
+MIGRATION_MODULES = {
+    'accounts': None,  # Desativa completamente migrações para accounts
+}
+
+# Remova qualquer configuração de DATABASE_ROUTERS para autenticação
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+]

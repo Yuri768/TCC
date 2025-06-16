@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Histórico de Consultas</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    {% load static %}  
+    <link rel="stylesheet" type="text/css" href="{% static 'css/historico.css' %}">
+</head>
+<body>
+    <!-- Menu Lateral -->
+    <button class="menu-toggle" id="menuToggle">
+        <i class="fas fa-bars"></i>
+    </button>
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <h3>Clínica Saúde Total</h3>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="{% url 'home:main' %}"><i class="fas fa-home"></i> Home</a></li>
+            {% if usuario %}
+            <li><a href="{% url 'accounts:minha_conta'%}"><i class="fas fa-home"></i> Minha conta</a></li>
+            {% else %}
+            <li><a href="{% url 'accounts:login'%}"><i class="fas fa-home"></i> Minha conta</a></li>
+            {% endif %}
+            <li><a href="{% url 'agendamento:agendar' %}"><i class="fas fa-calendar-plus"></i> Agendar</a></li>
+            <li><a href="{% url 'agendamento:historico' %}" class="active"><i class="fas fa-history"></i> Histórico</a></li>
+        </ul>
+    </nav>
+
+    <!-- Conteúdo Principal -->
+    <main class="main-content">
+        <div class="header">
+            <div class="user-info">
+                {% load static %}
+                <img src="{% static 'img/img_usuario.png' %}" alt="Usuário">
+                <span>Olá, {{ usuario.nome }} </span>
+            </div>
+            <h1>Histórico de Consultas</h1>
+        </div>
+
+        <div class="consultas-container" id="consultasContainer">
+            <!-- As consultas serão carregadas aqui via JavaScript -->
+        </div>
+    </main>
+
+    <!-- Modal de Cancelamento -->
+    <div class="modal" id="cancelModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Cancelar Consulta</h3>
+                <button class="close-modal" id="closeModal">&times;</button>
+            </div>
+            <form id="cancelForm">
+                <input type="hidden" id="consultaId">
+                <div class="form-group">
+                    <label for="motivo">Motivo do cancelamento:</label>
+                    <textarea id="motivo" required></textarea>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" id="cancelCancel">Cancelar</button>
+                    <button type="submit" class="btn btn-cancel">Confirmar Cancelamento</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script src="{% static 'js/historico.js' %}"></script>
+</body>
+</html>

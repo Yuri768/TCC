@@ -25,13 +25,13 @@ def login(request):
         else:
             return redirect('/accounts/login/?status=2')
     
-        if not Usuario.objects.filter(email = email).exists():
+        if not Pessoa.objects.filter(email=email).exists():
             return redirect('/accounts/login/?status=3')
 
-        usuario = Usuario.objects.get(email = email)
+        pessoa = Pessoa.objects.get(email=email)
 
-        if bcrypt.checkpw(senha.encode('utf-8'), usuario.senha.encode('utf-8')):
-            request.session['usuario_id'] = usuario.pk
+        if bcrypt.checkpw(senha.encode('utf-8'), pessoa.senha.encode('utf-8')):
+            request.session['usuario_id'] = pessoa.id_pessoa
             return redirect('home:main')
         else:
             return redirect('/accounts/login/?status=4')
@@ -45,7 +45,7 @@ def registrar(request):
         return render(request, 'registrar.html', {'status': status})
     elif request.method == 'POST':
         email = request.POST.get('email')
-        data_nascimento = request.POST.get('data_nascimento')
+        data_nascimento_str = request.POST.get('data_nascimento')
         nome = request.POST.get('nome')
         senha = request.POST.get('senha')
         cpf = request.POST.get('cpf')
@@ -55,7 +55,7 @@ def registrar(request):
     if not validar_email(email):
         return redirect('/accounts/registrar/?status=1')
     
-    if Usuario.objects.filter(email = email).exists():
+    if Pessoa.objects.filter(email = email).exists():
         return redirect('/accounts/registrar/?status=2')
 
     
@@ -68,11 +68,12 @@ def registrar(request):
     else:
         return redirect('/accounts/registrar/?status=4')
     
-    
-    if not CPF().validate(cpf):
+    cpf_limpo = "".join(filter(str.isdigit, cpf))
+
+    if not CPF().validate(cpf_limpo):
         return redirect('/accounts/registrar/?status=5')
 
-    if Usuario.objects.filter(cpf = cpf).exists():
+    if Pessoa.objects.filter(cpf = cpf).exists():
         return redirect('/accounts/registrar/?status=6')
 
     if senha != None:
@@ -81,41 +82,90 @@ def registrar(request):
     else:
         return redirect('/accounts/registrar/?status=7')
     
-    if not data_nascimento:
+    if not data_nascimento_str:
         return redirect('/accounts/registrar/?status=8')
 
+    try:
+        senha_hashed = bcrypt.hashpw(senha.encode('utf-8'), bcrypt.gensalt())
+        senha_hashed_str = senha_hashed.decode('utf-8')
+        
+        cpf_formatado = formatandoCPF(cpf)
+        cpf = cpf_formatado
+
+        data_nascimento = datetime.strptime(data_nascimento_str, '%Y-%m-%d').date()
+
+        # 1. Cria a Pessoa
+        pessoa = Pessoa.objects.create(
+            email=email,
+            data_nascimento=data_nascimento,
+            nome=nome,
+            senha=senha_hashed_str,
+            cpf=cpf,
+            type='USUARIO'
+        )
+
+        # 2. Cria o Usuario relacionado
+        usuario = Usuario.objects.create(
+            id_usuario=pessoa,
+            endereco=endereco
+        )
+
+        request.session['usuario_id'] = pessoa.id_pessoa
+        return redirect('home:main')
+    except Exception as e:
+        import logging
+        logger = logging.getLogger(__name__)
+        logger.error(f"Erro no registro: {str(e)}", exc_info=True)
+        # Adicione isto para debug temporário
+        print(f"ERRO DETALHADO: {str(e)}")
+        return redirect('/accounts/registrar/?status=99')
+
+
+def minha_conta(request):
+
+    usuario_id = request.session.get('usuario_id') 
+
+    if not usuario_id:
+        return redirect('accounts:login')
+
+    context = {}
+    
+    if usuario_id:
+        try:
+            # Primeiro verifica se a Pessoa existe
+            pessoa = Pessoa.objects.get(id_pessoa=usuario_id)
+            
+            # Cria a estrutura básica do usuário com os dados da Pessoa
+            usuario_data = {
+                'nome': pessoa.nome,
+                'email': pessoa.email,
+                'cpf': pessoa.cpf,
+                'data_nascimento': pessoa.data_nascimento.strftime('%d/%m/%Y') if pessoa.data_nascimento else None
+            }
+            
+            # Depois tenta obter o Usuario relacionado para complementar os dados
+            try:
+                usuario = Usuario.objects.get(id_usuario=usuario_id)
+                usuario_data.update({
+                    'endereco': usuario.endereco,
+                    'data_cadastro': usuario.data_cadastro.strftime('%d/%m/%Y') if usuario.data_cadastro else None
+                })
+            except Usuario.DoesNotExist:
+                # Se não encontrar o Usuario, usa valores padrão
+                usuario_data.update({
+                    'endereco': 'Não informado',
+                    'data_cadastro': None
+                })
+                # Remove a sessão pois o usuário está incompleto
+                del request.session['usuario_id']
                 
-
-    #?status=1 (Erro de email, email não é valido)
-    #?status=2 (Erro de email, email ja existe)
-    #?status=3 (Erro de nome, nome não pode conter numeros)
-    #?status=4 (Erro de nome, nome pequeno de mais ou nulo)
-    #?status=5 (Erro de cpf, cpf não é valido)
-    #?status=6 (Erro de cpf, cpf Já esta cadastrado em uma conta)
-    #?status=7 (Erro de senha, senha muito pequena)
-    #?status=8 (Erro de data de nascimento, data de nascimento invalida)
-
-
-    senha_hashed = bcrypt.hashpw(senha.encode('utf-8'), bcrypt.gensalt())
-    senha_hashed_str = senha_hashed.decode('utf-8')
+            context['usuario'] = usuario_data
+                
+        except Pessoa.DoesNotExist:
+            # Se a Pessoa não existir, limpa a sessão
+            del request.session['usuario_id']
     
-    cpf_formatado = formatandoCPF(cpf)
-    cpf = cpf_formatado
-
-    usuario = Usuario.objects.create(
-        email=email,
-        data_nascimento=data_nascimento,
-        nome=nome,
-        senha=senha_hashed_str,
-        cpf=cpf,
-        data_cadastro= timezone.now(),
-        endereco=endereco
-    )
-
-    request.session['usuario_id'] = usuario.pk
-    
-    return redirect('home:main')
-
+    return render(request, 'conta_usuario.html', context)
 
 def logout(request):
     if 'usuario_id' in request.session:

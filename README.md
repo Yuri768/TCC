@@ -20,8 +20,13 @@ Instalando todas as bibliotecas necessarias:
 
 Para migrar o banco de dados é só rodar os seguintes comandos no terminal:
 
-`python manage.py makemigrations` e `python manage.py migrate`
-
+`python manage.py migrate auth`, 
+`python manage.py migrate admin`,
+`python manage.py migrate contenttypes`,
+`python manage.py migrate sessions`,
+`python manage.py makemigrations agendamento`,
+`python manage.py migrate agendamento --fake`,
+`python manage.py makemigrations --check`
 
 
 Abrir o servidor:
